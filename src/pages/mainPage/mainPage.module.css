@@ -1,0 +1,15 @@
+.buttons {
+    display: flex;
+    column-gap: 20px;
+}
+
+.button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    column-gap: 5px;
+}
+
+.table {
+    text-decoration: none;
+}
