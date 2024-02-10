@@ -12,10 +12,11 @@ import { ReactComponent as BlockIcon } from '../../assets/block.svg'
 import { ReactComponent as UnblockIcon } from '../../assets/unblock.svg'
 import { ReactComponent as BinIcon } from '../../assets/bin.svg'
 import { ReactComponent as CheckboxIcon } from '../../assets/checkbox.svg'
+import TableRow from '../../components/tableRow/tableRow'
 
 
 const MainPage = () => {
-  // const [data, setData] = useState<TUser[]>(userData)
+  const [selectedRows, setSelectedRows] = useState<Number[]>([])
 
   const dispatch = useAppDispatch()
   const users = useSelector(getUserDataSelector)
@@ -25,56 +26,54 @@ const MainPage = () => {
 
   }, [])
 
-  const infoUserLines = users.map((item) => {
-    return (<tr key={item.id}>
-      <td>
-        <Form.Check aria-label="option 1" />
-      </td>
-      <td>{item.name}, {item.profession}</td>
-      <td>{item.eMail}</td>
-      <td>{item.lastLogin}</td>
-      <td>{item.status}</td>
-    </tr>)
+  function checkboxHandler(id: number) {
 
+    if (selectedRows.includes(id)) {
+      const filtered = selectedRows.filter((item) => item !== id)
+      setSelectedRows(filtered)
+    } else {
+      setSelectedRows([...selectedRows, id])
+    }
+  }
+
+  const infoUserLines = users.map((item) => {
+    return <TableRow key={item.id} {...item} callback={checkboxHandler} />
   })
 
   return (
-    <>
-      <Link to={"/authpage"}>
-        <div className={styles.buttons}>
-          <Button variant="primary" className={styles.button}>
-            <BlockIcon />
-            Block
-          </Button>
-          <Button variant="primary" className={styles.button}>
-            <UnblockIcon />
-            Unblock
-          </Button>
-          <Button variant="danger" className={styles.button}>
-            <BinIcon />
-            Delete
-          </Button>
+    <section className={styles.container}>
+      <div className={styles.buttons}>
+        <Button variant="primary" className={styles.button}>
+          <BlockIcon />
+          Block
+        </Button>
+        <Button variant="primary" className={styles.button}>
+          <UnblockIcon />
+          Unblock
+        </Button>
+        <Button variant="danger" className={styles.button} onClick={() => { console.log(selectedRows) }}>
+          <BinIcon />
+          Delete
+        </Button>
 
-        </div>
-        <Table variant="dark">
-          <thead >
-            <tr>
-              <th>
-                <CheckboxIcon />
-              </th>
-              <th>Name, position</th>
-              <th>E-mail</th>
-              <th>Last Login</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {infoUserLines}
-          </tbody>
-        </Table>
-      </Link>
-
-    </>
+      </div>
+      <Table bordered hover variant="dark">
+        <thead >
+          <tr>
+            <th>
+              <CheckboxIcon />
+            </th>
+            <th>Name, position</th>
+            <th>E-mail</th>
+            <th>Last Login</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {infoUserLines}
+        </tbody>
+      </Table>
+    </section>
   )
 }
 export default MainPage
