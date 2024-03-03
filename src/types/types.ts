@@ -2,7 +2,7 @@ export type TUser = {
     id: number
     name: string
     profession: string
-    eMail: string
+    email: string
     lastLogin: string
-    status: string
+    status: string    
 }
